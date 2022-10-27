@@ -12,6 +12,8 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { AdminGuard } from 'src/auth/guards/admin.guard';
+import { OnlyAdmin } from 'src/auth/only-admin.decorator';
 
 @Controller('user')
 export class UserController {
@@ -22,7 +24,8 @@ export class UserController {
     return this.userService.create(dto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @OnlyAdmin(true)
   @Get()
   findAll() {
     return this.userService.findAll();
