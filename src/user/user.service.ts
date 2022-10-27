@@ -15,6 +15,18 @@ export class UserService {
     password: false,
     isAdmin: true,
   };
+
+  async findById(id: number): Promise<User> {
+    return this.prisma.user
+      .findUniqueOrThrow({
+        where: { id },
+        select: this.UserSelect,
+      })
+      .catch((err) => {
+        throw new NotFoundException(err.message);
+      });
+  }
+
   async create(dto: CreateUserDto): Promise<User> {
     const data: User = {
       ...dto,
@@ -28,24 +40,11 @@ export class UserService {
   }
 
   async findOne(id: number): Promise<User> {
-    return this.prisma.user
-      .findUniqueOrThrow({
-        where: { id },
-        select: this.UserSelect,
-      })
-      .catch((err) => {
-        throw new NotFoundException(err.message);
-      });
+    return this.findById(id);
   }
 
   async update(id: number, dto: UpdateUserDto): Promise<User> {
-    await this.prisma.user
-      .findUniqueOrThrow({
-        where: { id },
-      })
-      .catch((err) => {
-        throw new NotFoundException(err.message);
-      });
+    await this.findById(id);
 
     const data: Partial<User> = { ...dto };
 
@@ -61,6 +60,7 @@ export class UserService {
   }
 
   async remove(id: number) {
+    await this.findById(id);
     await this.prisma.user.delete({ where: { id } });
   }
 }
