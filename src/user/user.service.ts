@@ -38,8 +38,26 @@ export class UserService {
       });
   }
 
-  async update(id: number, dto: UpdateUserDto) {
-    return this.prisma.user.update({ where: { id }, data: dto });
+  async update(id: number, dto: UpdateUserDto): Promise<User> {
+    await this.prisma.user
+      .findUniqueOrThrow({
+        where: { id },
+      })
+      .catch((err) => {
+        throw new NotFoundException(err.message);
+      });
+
+    const data: Partial<User> = { ...dto };
+
+    if (data.password) {
+      data.password = await bcrypt.hash(data.password, 10);
+    }
+
+    return this.prisma.user.update({
+      where: { id },
+      data,
+      select: this.UserSelect,
+    });
   }
 
   async remove(id: number) {
