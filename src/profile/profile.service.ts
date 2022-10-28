@@ -40,11 +40,18 @@ export class ProfileService {
     return this.findById(id);
   }
 
-  update(id: number, updateProfileDto: UpdateProfileDto) {
-    return `This action updates a #${id} profile`;
+  async update(id: number, dto: UpdateProfileDto): Promise<Profile> {
+    await this.findById(id);
+    const data: Partial<Profile> = { ...dto };
+
+    return this.prisma.profile.update({
+      where: { id },
+      data,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} profile`;
+  async remove(id: number) {
+    await this.findById(id);
+    await this.prisma.profile.delete({ where: { id } });
   }
 }
