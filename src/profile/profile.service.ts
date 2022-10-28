@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
@@ -8,6 +8,16 @@ import { Profile } from './entities/profile.entity';
 @Injectable()
 export class ProfileService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async findById(id: number): Promise<Profile> {
+    return this.prisma.profile
+      .findUniqueOrThrow({
+        where: { id },
+      })
+      .catch((err) => {
+        throw new NotFoundException(err.message);
+      });
+  }
 
   async create(dto: CreateProfileDto): Promise<Profile> {
     const data: Prisma.ProfileCreateInput = {
@@ -22,12 +32,12 @@ export class ProfileService {
     return this.prisma.profile.create({ data });
   }
 
-  findAll() {
-    return `This action returns all profile`;
+  async findAll(): Promise<Profile[]> {
+    return this.prisma.profile.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} profile`;
+  async findOne(id: number): Promise<Profile> {
+    return this.findById(id);
   }
 
   update(id: number, updateProfileDto: UpdateProfileDto) {
