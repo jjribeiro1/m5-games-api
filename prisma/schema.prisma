@@ -16,7 +16,7 @@ model User {
   username String    @unique
   password String
   isAdmin  Boolean   @default(false)
-  profiles  Profile[]
+  profiles Profile[]
 }
 
 model Profile {
@@ -26,4 +26,15 @@ model Profile {
 
   user   User @relation(fields: [userId], references: [id])
   userId Int
+}
+
+model Game {
+  id                   Int     @id @default(autoincrement())
+  name                 String  @unique
+  image                String  @unique
+  description          String?
+  year                 Int
+  imdb_score           Int
+  trailer_youtube_url  String
+  gameplay_youtube_url String
 }
