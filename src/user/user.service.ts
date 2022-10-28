@@ -20,7 +20,15 @@ export class UserService {
     return this.prisma.user
       .findUniqueOrThrow({
         where: { id },
-        select: this.UserSelect,
+        select: {
+          ...this.UserSelect,
+          profiles: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
       })
       .catch((err) => {
         throw new NotFoundException(err.message);
