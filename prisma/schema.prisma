@@ -26,8 +26,6 @@ model Profile {
 
   user   User @relation(fields: [userId], references: [id])
   userId Int
-
-  games GamesOnProfile[]
 }
 
 model Game {
@@ -40,15 +38,24 @@ model Game {
   trailer_youtube_url  String
   gameplay_youtube_url String
 
-  profiles GamesOnProfile[]
+  genres Game_Genre[]
 }
 
-model GamesOnProfile {
-  id        Int     @id @default(autoincrement())
-  profile   Profile @relation(fields: [profileId], references: [id])
-  profileId Int
-  game      Game    @relation(fields: [gameId], references: [id])
-  gameId    Int
+model Game_Genre {
+  id Int @id @default(autoincrement())
 
-  @@unique([gameId, profileId])
+  game   Game @relation(fields: [gameId], references: [id])
+  gameId Int
+
+  genre   Genre @relation(fields: [genreId], references: [id])
+  genreId Int
+
+  @@unique([gameId, genreId])
+}
+
+model Genre {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  games Game_Genre[]
 }
