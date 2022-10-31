@@ -26,19 +26,24 @@ export class GenreService {
     return this.prisma.genre.create({ data });
   }
 
-  async findAll() {
+  async findAll(): Promise<Genre[]> {
     return this.prisma.genre.findMany();
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<Genre> {
     return this.findById(id);
   }
 
-  update(id: number, dto: UpdateGenreDto) {
-    return `This action updates a #${id} genre`;
+  async update(id: number, dto: UpdateGenreDto): Promise<Genre> {
+    await this.findById(id);
+    return this.prisma.genre.update({
+      where: { id },
+      data: dto,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} genre`;
+  async remove(id: number) {
+    await this.findById(id);
+    await this.prisma.genre.delete({ where: { id } });
   }
 }
