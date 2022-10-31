@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 import { CreateGameDto } from './dto/create-game.dto';
@@ -7,6 +7,32 @@ import { UpdateGameDto } from './dto/update-game.dto';
 @Injectable()
 export class GameService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async findById(id: number) {
+    return this.prisma.game
+      .findUniqueOrThrow({
+        where: { id },
+        select: {
+          id: true,
+          name: true,
+          image: true,
+          year: true,
+          description: true,
+          imdb_score: true,
+          trailer_youtube_url: true,
+          gameplay_youtube_url: true,
+          genres: {
+            select: {
+              genre: true,
+            },
+          },
+        },
+      })
+      .catch((err) => {
+        console.log(err.message);
+        throw new NotFoundException(err.message);
+      });
+  }
 
   async create(dto: CreateGameDto) {
     const data: Prisma.GameCreateInput = {
@@ -42,12 +68,12 @@ export class GameService {
       .catch((err) => console.log(err.message));
   }
 
-  findAll() {
-    return `This action returns all game`;
+  async findAll() {
+    return this.prisma.game.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} game`;
+  async findOne(id: number) {
+    return this.findById(id);
   }
 
   update(id: number, dto: UpdateGameDto) {
