@@ -12,6 +12,19 @@ export class GenreService {
     return this.prisma.genre
       .findUniqueOrThrow({
         where: { id },
+        select: {
+          name: true,
+          games: {
+            select: {
+              game: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
+        },
       })
       .catch((err) => {
         throw new NotFoundException(err.message);
