@@ -11,11 +11,12 @@ datasource db {
 }
 
 model User {
-  id       Int       @id @default(autoincrement())
+  id       Int     @id @default(autoincrement())
   name     String
-  username String    @unique
+  username String  @unique
   password String
-  isAdmin  Boolean   @default(false)
+  isAdmin  Boolean @default(false)
+
   profiles Profile[]
 }
 
@@ -26,6 +27,27 @@ model Profile {
 
   user   User @relation(fields: [userId], references: [id])
   userId Int
+
+  favoriteGames FavoriteGameInProfile[]
+}
+
+model FavoriteGameInProfile {
+  id Int @id @default(autoincrement())
+
+  favoriteGame   FavoriteGame @relation(fields: [favoriteGameId], references: [id])
+  favoriteGameId Int
+
+  profile   Profile @relation(fields: [profileId], references: [id])
+  profileId Int
+}
+
+model FavoriteGame {
+  id Int @id @default(autoincrement())
+
+  game   Game @relation(fields: [gameId], references: [id])
+  gameId Int
+
+  profiles FavoriteGameInProfile[]
 }
 
 model Game {
@@ -38,7 +60,8 @@ model Game {
   trailer_youtube_url  String
   gameplay_youtube_url String
 
-  genres Game_Genre[]
+  genres    Game_Genre[]
+  favorites FavoriteGame[]
 }
 
 model Game_Genre {
