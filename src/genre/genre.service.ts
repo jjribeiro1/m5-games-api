@@ -9,7 +9,7 @@ export class GenreService {
   constructor(private readonly prisma: PrismaService) {}
 
   async findById(id: number): Promise<Genre> {
-    return this.prisma.user
+    return this.prisma.genre
       .findUniqueOrThrow({
         where: { id },
       })
