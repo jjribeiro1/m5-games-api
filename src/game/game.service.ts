@@ -3,6 +3,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
+import { Game } from './entities/game.entity';
 
 @Injectable()
 export class GameService {
@@ -76,8 +77,15 @@ export class GameService {
     return this.findById(id);
   }
 
-  update(id: number, dto: UpdateGameDto) {
-    return `This action updates a #${id} game`;
+  async update(id: number, dto: UpdateGameDto) {
+    const data: Partial<typeof dto> = { ...dto };
+
+    await this.findById(id);
+
+    return this.prisma.game.update({
+      where: { id },
+      data,
+    });
   }
 
   remove(id: number) {
