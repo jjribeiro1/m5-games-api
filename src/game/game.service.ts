@@ -90,6 +90,8 @@ export class GameService {
 
   async remove(id: number) {
     await this.findById(id);
-    await this.prisma.game.delete({ where: { id } });
+    await this.prisma.game.delete({
+      where: { id },
+    });
   }
 }
