@@ -88,7 +88,8 @@ export class GameService {
     });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} game`;
+  async remove(id: number) {
+    await this.findById(id);
+    await this.prisma.game.delete({ where: { id } });
   }
 }
