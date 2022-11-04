@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { ProfileModule } from './profile/profile.module';
 import { GameModule } from './game/game.module';
 import { GenreModule } from './genre/genre.module';
+import { FavoriteModule } from './favorite/favorite.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { GenreModule } from './genre/genre.module';
     ProfileModule,
     GameModule,
     GenreModule,
+    FavoriteModule,
   ],
   controllers: [AppController],
   providers: [AppService],
