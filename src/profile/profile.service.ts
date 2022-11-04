@@ -9,10 +9,25 @@ import { Profile } from './entities/profile.entity';
 export class ProfileService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findById(id: number): Promise<Profile> {
+  async findById(id: number) {
     return this.prisma.profile
       .findUniqueOrThrow({
         where: { id },
+        select: {
+          id: true,
+          userId: true,
+          name: true,
+          image: true,
+          favoriteGames: {
+            select: {
+              favoriteGame: {
+                select: {
+                  game: true,
+                },
+              },
+            },
+          },
+        },
       })
       .catch((err) => {
         throw new NotFoundException(err.message);
@@ -36,7 +51,7 @@ export class ProfileService {
     return this.prisma.profile.findMany();
   }
 
-  async findOne(id: number): Promise<Profile> {
+  async findOne(id: number) {
     return this.findById(id);
   }
 
