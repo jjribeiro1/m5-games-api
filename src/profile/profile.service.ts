@@ -20,6 +20,7 @@ export class ProfileService {
           image: true,
           favoriteGames: {
             select: {
+              favoriteGameId: true,
               favoriteGame: {
                 select: {
                   game: true,

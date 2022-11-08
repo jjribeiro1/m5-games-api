@@ -30,6 +30,16 @@ export class UserService {
             select: {
               id: true,
               name: true,
+              image: true,
+              favoriteGames: {
+                select: {
+                  favoriteGame: {
+                    select: {
+                      gameId: true,
+                    },
+                  },
+                },
+              },
             },
           },
         },

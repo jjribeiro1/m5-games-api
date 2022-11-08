@@ -26,8 +26,10 @@ export class FavoriteService {
   async findAll() {
     return this.prisma.favoriteGame.findMany({
       select: {
+        id: true,
         game: {
           select: {
+            id: true,
             name: true,
           },
         },

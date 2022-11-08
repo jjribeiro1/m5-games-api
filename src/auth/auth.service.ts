@@ -17,6 +17,15 @@ export class AuthService {
 
     const user: User = await this.prisma.user.findUnique({
       where: { username },
+      include: {
+        profiles: {
+          select: {
+            id: true,
+            name: true,
+            image: true,
+          },
+        },
+      },
     });
 
     if (!user) {

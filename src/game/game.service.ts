@@ -24,7 +24,11 @@ export class GameService {
           gameplay_youtube_url: true,
           genres: {
             select: {
-              genre: true,
+              genre: {
+                select: {
+                  name: true,
+                },
+              },
             },
           },
         },
