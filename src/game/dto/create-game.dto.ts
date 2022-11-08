@@ -19,9 +19,7 @@ export class CreateGameDto {
 
   @IsOptional()
   @IsString()
-  @IsNotEmpty()
-  @MinLength(10)
-  description?: string | null;
+  description?: string;
 
   @IsNumber()
   year: number;
