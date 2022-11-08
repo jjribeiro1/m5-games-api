@@ -34,7 +34,7 @@ model Profile {
 model FavoriteGameInProfile {
   id Int @id @default(autoincrement())
 
-  favoriteGame   FavoriteGame @relation(fields: [favoriteGameId], references: [id])
+  favoriteGame   FavoriteGame @relation(fields: [favoriteGameId], references: [id], onDelete: Cascade)
   favoriteGameId Int
 
   profile   Profile @relation(fields: [profileId], references: [id])
@@ -44,7 +44,7 @@ model FavoriteGameInProfile {
 model FavoriteGame {
   id Int @id @default(autoincrement())
 
-  game   Game @relation(fields: [gameId], references: [id])
+  game   Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
   gameId Int
 
   profiles FavoriteGameInProfile[]
