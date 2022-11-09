@@ -12,8 +12,11 @@ import { ProfileService } from './profile.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { AdminGuard } from 'src/auth/guards/admin.guard';
+import { OnlyAdmin } from 'src/auth/only-admin.decorator';
 
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, AdminGuard)
+@OnlyAdmin(false)
 @Controller('profile')
 export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
